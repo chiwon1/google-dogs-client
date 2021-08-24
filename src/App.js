@@ -11,7 +11,7 @@ import { firebaseAuth } from "./config/firebaseAuth";
 import { updateToken } from "./api/firebaseAuth";
 
 function App() {
-  const [isLogin, setIsLogin] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
 
   useEffect(() => {
     firebaseAuth().onAuthStateChanged(async function (user) {
@@ -20,30 +20,23 @@ function App() {
 
         updateToken(token);
 
-        setIsLogin(true);
+        setIsLoggedIn(true);
       }
     });
   }, []);
 
-  function handleLoginStatus() {
-    setIsLogin(false);
-  }
-
   return (
     <div>
-      <NavBar
-        changeLoginStatusToLogout={handleLoginStatus}
-        loginStatus={isLogin}
-      />
+      <NavBar />
       <Switch>
         <Route exact path="/">
-          <Home loginStatus={isLogin} />
+          <Home />
         </Route>
         <Route path="/documents/new" exact>
-          {isLogin && <Redirect to={`/documents/${v4()}`} />}
+          {isLoggedIn && <Redirect to={`/documents/${v4()}`} />}
         </Route>
         <Route path="/documents/:id">
-          {isLogin && <Document />}
+          {isLoggedIn && <Document />}
         </Route>
       </Switch>
     </div>

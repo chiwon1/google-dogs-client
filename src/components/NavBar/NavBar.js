@@ -4,15 +4,18 @@ import { Link, useHistory } from "react-router-dom";
 import { authenticate, firebaseAuth } from "../../config/firebaseAuth";
 import CONSTANTS from "../../constants";
 
-function NavBar({ changeLoginStatusToLogout, loginStatus }) {
+function NavBar() {
   const history = useHistory();
 
   function handleCreateDocumentOnClick() {
-    if (loginStatus) {
-      history.push("/documents/new");
-    } else {
-      authenticate();
-    }
+    firebaseAuth().onAuthStateChanged(async function (user) {
+      if (user) {
+
+        history.push("/documents/new");
+      } else {
+        authenticate();
+      }
+    });
   }
 
   function handleLoginOnClick() {
@@ -23,7 +26,6 @@ function NavBar({ changeLoginStatusToLogout, loginStatus }) {
     try {
       await firebaseAuth().signOut();
 
-      changeLoginStatusToLogout();
       history.push("/");
 
       console.log("// Sign-out successful.");

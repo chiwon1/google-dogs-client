@@ -1,8 +1,7 @@
 import React from "react";
 import "./styles.css";
 
-function Home(props) {
-
+function Home() {
   return (
     <div className="container">
 
