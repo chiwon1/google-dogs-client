@@ -1,29 +1,31 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
-  BrowserRouter as Router,
   Switch,
   Route,
+  Redirect,
 } from "react-router-dom";
-
-import axios from "axios";
 
 import auth from "./hoc/auth";
 
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home/";
 import TextEditor from "./components/TextEditor";
+import { v4 as uuidV4 } from "uuid";
 
 function App() {
   return (
-    <Router>
-      <div>
-        <Switch>
-          <Route exact path="/" component={auth(Home, null)} />
-          <Route exact path="/documents" component={auth(TextEditor, null)} />
-          {/* <Route exact path="/" component={} /> */}
-        </Switch>
-      </div>
-    </Router>
+    <div>
+      <NavBar />
+      <Switch>
+        <Route exact path="/" component={auth(Home, null)} />
+        <Route path="/documents/new" exact>
+          <Redirect to={`/documents/${uuidV4()}`} />
+        </Route>
+        <Route path="/documents/:id">
+          <TextEditor />
+        </Route>
+      </Switch>
+    </div>
   );
 }
 
