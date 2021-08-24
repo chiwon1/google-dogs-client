@@ -7,43 +7,45 @@ import {
 
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home/";
-import TextEditor from "./components/TextEditor";
 import { v4 as uuidV4 } from "uuid";
-import { firebaseAuth } from "./config/firebaseAuth";
+import { authenticate, firebaseAuth } from "./config/firebaseAuth";
 import { updateToken } from "./api/firebaseAuth";
+import Document from "./pages/Document/";
 
 function App() {
-  const [userInfo, setUserInfo] = useState(null);
-  console.log("userInfo", userInfo);
+  const [isLogin, setIsLogin] = useState(null);
 
   useEffect(() => {
-    firebaseAuth().onAuthStateChanged(user => {
-      console.log("user", user);
+    firebaseAuth().onAuthStateChanged(async function(user) {
       if (user) {
-        user.getIdToken()
-          .then(token => updateToken(token));
+        const token = await user.getIdToken();
 
-        setUserInfo(user);
+        updateToken(token);
+
+        setIsLogin(true);
       }
-    })
+    });
   }, []);
 
-  function handleLogout() {
-    setUserInfo(null);
+  function handleLoginStatus() {
+    setIsLogin(false);
   }
 
   return (
     <div>
-      <NavBar logout={handleLogout}/>
+      <NavBar
+        changeLoginStatusToLogout={handleLoginStatus}
+        loginStatus={isLogin}
+      />
       <Switch>
         <Route exact path="/">
-          <Home userInfo={userInfo} />
+          <Home loginStatus={isLogin} />
         </Route>
         <Route path="/documents/new" exact>
-          {userInfo && <Redirect to={`/documents/${uuidV4()}`} />}
+          {isLogin && <Redirect to={`/documents/${uuidV4()}`}/>}
         </Route>
         <Route path="/documents/:id">
-          {userInfo && <TextEditor />}
+          {isLogin && <Document />}
         </Route>
       </Switch>
     </div>

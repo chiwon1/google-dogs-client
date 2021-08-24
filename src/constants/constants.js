@@ -1,3 +1,5 @@
-export const CONSTANTS = {
+const CONSTANTS = {
   LOGOUT: "Logout",
-}
+};
+
+export default CONSTANTS;

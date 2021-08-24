@@ -5,7 +5,7 @@ function Home(props) {
 
   return (
     <div className="container">
-      {/* {isLogin && <div>Test</div>} */}
+      
     </div>
   );
 }
