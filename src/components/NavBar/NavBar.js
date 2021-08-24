@@ -1,6 +1,8 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
+
 import { authenticate, firebaseAuth } from "../../config/firebaseAuth";
+import CONSTANTS from "../../constants";
 
 function NavBar({ changeLoginStatusToLogout, loginStatus }) {
   const history = useHistory();
@@ -23,8 +25,8 @@ function NavBar({ changeLoginStatusToLogout, loginStatus }) {
 
       changeLoginStatusToLogout();
       history.push("/");
-      console.log("// Sign-out successful.");
 
+      console.log("// Sign-out successful.");
     } catch (err) {
       console.log("// An error happened.", err);
     }
@@ -32,10 +34,10 @@ function NavBar({ changeLoginStatusToLogout, loginStatus }) {
 
   return (
     <nav>
-      <Link to="/">Home</Link>
-      <button onClick={handleCreateDocumentOnClick}>Create Document</button>
-      <button onClick={handleLoginOnClick}>Login</button>
-      <button onClick={handleLogoutOnClick}>Logout</button>
+      <Link to="/">{CONSTANTS.HOME}</Link>
+      <button onClick={handleCreateDocumentOnClick}>{CONSTANTS.CREATE_DOCUMENT}</button>
+      <button onClick={handleLoginOnClick}>{CONSTANTS.LOGIN}</button>
+      <button onClick={handleLogoutOnClick}>{CONSTANTS.LOGOUT}</button>
     </nav>
   );
 }

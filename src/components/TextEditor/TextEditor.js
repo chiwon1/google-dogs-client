@@ -1,9 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
+import "./styles.css";
+
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
-import "./styles.css";
+
 import { io } from "socket.io-client";
-import { useParams } from "react-router-dom";
+
+import CONSTANTS from "../../constants";
 
 const SAVE_INTERVAL = 20000;
 
@@ -28,6 +33,7 @@ export default function TextEditor() {
     const s = io("/", {
       withCredentials: true,
     });
+
     setSocket(s);
 
     return () => {
@@ -36,11 +42,11 @@ export default function TextEditor() {
   }, []);
 
   useEffect(() => {
-    if (socket == null || quill == null) {
+    if (!socket || !quill) {
       return;
     }
 
-    socket.once("load-document", document => {
+    socket.once("load-document", function (document) {
       quill.setContents(document);
       quill.enable();
     });
@@ -49,7 +55,7 @@ export default function TextEditor() {
   }, [socket, quill, documentId])
 
   useEffect(() => {
-    if (socket == null || quill == null) {
+    if (!socket || !quill) {
       return;
     }
 
@@ -63,11 +69,11 @@ export default function TextEditor() {
   }, [socket, quill]);
 
   useEffect(() => {
-    if (socket == null || quill == null) {
+    if (!socket || !quill) {
       return;
     }
 
-    const handler = delta => {
+    const handler = function (delta) {
       quill.updateContents(delta);
     };
 
@@ -79,11 +85,11 @@ export default function TextEditor() {
   }, [socket, quill]);
 
   useEffect(() => {
-    if (socket == null || quill == null) {
+    if (!socket || !quill) {
       return;
     }
 
-    const handler = (delta, oldDelta, source) => {
+    function handler(delta, oldDelta, source) {
       if (source !== "user") {
         return;
       }
@@ -114,7 +120,7 @@ export default function TextEditor() {
     });
 
     q.disable();
-    q.setText("Loading...");
+    q.setText(CONSTANTS.TEXT_EDITOR_LOADING_MESSAGE);
     setQuill(q);
   }, []);
 
