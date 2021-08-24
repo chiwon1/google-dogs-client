@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "react-router-dom";
 
 import "./styles.css";
@@ -24,37 +24,31 @@ const TOOLBAR_OPTIONS = [
   ["clean"],
 ];
 
-export default function TextEditor() {
+function TextEditor() {
+  const socketRef = useRef(null);
+
   const { id: documentId } = useParams();
-  const [socket, setSocket] = useState();
   const [quill, setQuill] = useState();
 
   useEffect(() => {
-    const s = io("/", {
-      withCredentials: true,
+    if (!socketRef.current) {
+      socketRef.current = io(process.env.REACT_APP_HOST_API);
+    }
+
+    const { current: socket } = socketRef;
+
+    socket.on("connect", () => {
+      console.log("connect");
     });
 
-    setSocket(s);
-
     return () => {
-      s.disconnect();
+      socket.close();
     };
   }, []);
 
   useEffect(() => {
-    if (!socket || !quill) {
-      return;
-    }
+    const { current: socket } = socketRef;
 
-    socket.once("load-document", function (document) {
-      quill.setContents(document);
-      quill.enable();
-    });
-
-    socket.emit("get-document", documentId);
-  }, [socket, quill, documentId])
-
-  useEffect(() => {
     if (!socket || !quill) {
       return;
     }
@@ -63,49 +57,35 @@ export default function TextEditor() {
       socket.emit("save-document", quill.getContents())
     }, SAVE_INTERVAL);
 
-    return () => {
-      clearInterval(interval);
-    }
-  }, [socket, quill]);
+    socket.once("load-document", function (document) {
+      quill.setContents(document);
+      quill.enable();
+    });
 
-  useEffect(() => {
-    if (!socket || !quill) {
-      return;
-    }
-
-    const handler = function (delta) {
+    socket.on("receive-changes", function (delta) {
       quill.updateContents(delta);
-    };
+    });
 
-    socket.on("receive-changes", handler);
-
-    return () => {
-      socket.off("receive-changes", handler);
-    };
-  }, [socket, quill]);
-
-  useEffect(() => {
-    if (!socket || !quill) {
-      return;
-    }
-
-    function handler(delta, oldDelta, source) {
+    quill.on("text-change", function (delta, oldDelta, source) {
       if (source !== "user") {
         return;
       }
 
       socket.emit("send-changes", delta);
-    };
+    });
 
-    quill.on("text-change", handler);
+    socket.emit("get-document", documentId);
 
     return () => {
-      quill.off("text-change", handler);
-    };
-  }, [socket, quill]);
+      clearInterval(interval);
+
+      socket.off("receive-changes");
+      quill.off("text-change");
+    }
+  }, [documentId, quill]);
 
   const wrapperRef = useCallback(wrapper => {
-    if (wrapper == null) {
+    if (!wrapper) {
       return;
     }
 
@@ -114,17 +94,17 @@ export default function TextEditor() {
     const editor = document.createElement("div");
     wrapper.append(editor);
 
-    const q = new Quill(editor, {
+    const quill = new Quill(editor, {
       theme: "snow",
       modules: { toolbar: TOOLBAR_OPTIONS },
     });
 
-    q.disable();
-    q.setText(CONSTANTS.TEXT_EDITOR_LOADING_MESSAGE);
-    setQuill(q);
+    quill.disable();
+    quill.setText(CONSTANTS.TEXT_EDITOR_LOADING_MESSAGE);
+    setQuill(quill);
   }, []);
 
-  return (
-    <div className="container" ref={wrapperRef}></div>
-  );
+  return <div className="container" ref={wrapperRef}></div>;
 }
+
+export default TextEditor;
