@@ -24,11 +24,10 @@ const TOOLBAR_OPTIONS = [
   ["clean"],
 ];
 
-function TextEditor({ user }) {
+function TextEditor({ user, quill, setQuill }) {
   const socketRef = useRef(null);
 
   const { id: documentId } = useParams();
-  const [quill, setQuill] = useState();
 
   useEffect(() => {
     if (!socketRef.current) {
