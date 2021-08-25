@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 
 import Home from "./pages/Home/";
@@ -12,6 +12,7 @@ import { updateToken } from "./api/firebaseAuth";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     firebaseAuth().onAuthStateChanged(async function (user) {
@@ -21,6 +22,7 @@ function App() {
         updateToken(token);
 
         setIsLoggedIn(true);
+        setUser(user);
       }
     });
   }, []);
@@ -30,13 +32,13 @@ function App() {
       <NavBar />
       <Switch>
         <Route exact path="/">
-          <Home />
+          <Home user={user} />
         </Route>
         <Route path="/documents/new" exact>
           {isLoggedIn && <Redirect to={`/documents/${v4()}`} />}
         </Route>
         <Route path="/documents/:id">
-          {isLoggedIn && <Document />}
+          {isLoggedIn && <Document user={user} />}
         </Route>
       </Switch>
     </div>

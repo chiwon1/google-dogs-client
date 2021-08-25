@@ -4,7 +4,7 @@ import axios from "axios";
 import TextEditor from "../../components/TextEditor/";
 import CONSTANTS from "../../constants";
 
-function Document() {
+function Document({ user }) {
   const { id } = useParams();
 
   async function handleDeleteOnClick() {
@@ -20,7 +20,7 @@ function Document() {
   return (
     <div>
       <button onClick={handleDeleteOnClick}>{CONSTANTS.DELETE_DOCUMENT}</button>
-      <TextEditor />
+      <TextEditor user={user} />
     </div>
   );
 }

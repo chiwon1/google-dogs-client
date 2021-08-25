@@ -24,7 +24,7 @@ const TOOLBAR_OPTIONS = [
   ["clean"],
 ];
 
-function TextEditor() {
+function TextEditor({ user }) {
   const socketRef = useRef(null);
 
   const { id: documentId } = useParams();
@@ -74,7 +74,7 @@ function TextEditor() {
       socket.emit("send-changes", delta);
     });
 
-    socket.emit("get-document", documentId);
+    socket.emit("get-document", { documentId, creator: user?.uid });
 
     return () => {
       clearInterval(interval);
