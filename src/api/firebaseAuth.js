@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const provideBaseUrl = axios.create({
-  baseURL: `http://localhost:${process.env.REACT_APP_SERVER_PORT}`,
+  baseURL: process.env.REACT_APP_HOST_API,
 });
 
 export function updateToken(token) {
