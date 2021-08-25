@@ -3,6 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 
 import { authenticate, firebaseAuth } from "../../config/firebaseAuth";
 import CONSTANTS from "../../constants";
+import { v4 } from "uuid";
 
 function NavBar() {
   const history = useHistory();
@@ -11,7 +12,7 @@ function NavBar() {
     firebaseAuth().onAuthStateChanged(async function (user) {
       if (user) {
 
-        history.push("/documents/new");
+        history.push(`/documents/${v4()}`);
       } else {
         authenticate();
       }
@@ -28,9 +29,8 @@ function NavBar() {
 
       history.push("/");
 
-      console.log("// Sign-out successful.");
     } catch (err) {
-      console.log("// An error happened.", err);
+      alert(err);
     }
   }
 

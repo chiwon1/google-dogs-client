@@ -6,7 +6,6 @@ import Document from "./pages/Document/";
 
 import NavBar from "./components/NavBar";
 
-import { v4 } from "uuid";
 import { firebaseAuth } from "./config/firebaseAuth";
 import { updateToken } from "./api/firebaseAuth";
 
@@ -34,11 +33,11 @@ function App() {
         <Route exact path="/">
           <Home user={user} />
         </Route>
-        <Route exact path="/documents/new">
-          {isLoggedIn && <Redirect to={`/documents/${v4()}`} />}
-        </Route>
         <Route exact path="/documents/:id">
           {isLoggedIn && <Document user={user} />}
+        </Route>
+        <Route path="*" >
+          <Redirect to="/" />
         </Route>
       </Switch>
     </div>
