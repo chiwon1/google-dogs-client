@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-
-import { deleteDocument, updateDocument } from "../../api/firebaseAuth";
+import { updateDocument, deleteDocument } from "../../api/documents";
 
 import TextEditor from "../../components/TextEditor/";
 import CONSTANTS from "../../constants";
@@ -31,7 +30,7 @@ function Document({ user }) {
     <div>
       <button onClick={handleSaveOnClick}>{CONSTANTS.SAVE_DOCUMENT}</button>
       <button onClick={handleDeleteOnClick}>{CONSTANTS.DELETE_DOCUMENT}</button>
-      <TextEditor user={user} quill={quill} setQuill={(q) => setQuill(q)} />
+      <TextEditor user={user} quill={quill} handleQuill={(q) => setQuill(q)} />
     </div>
   );
 }

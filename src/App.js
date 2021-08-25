@@ -34,10 +34,10 @@ function App() {
         <Route exact path="/">
           <Home user={user} />
         </Route>
-        <Route path="/documents/new" exact>
+        <Route exact path="/documents/new">
           {isLoggedIn && <Redirect to={`/documents/${v4()}`} />}
         </Route>
-        <Route path="/documents/:id">
+        <Route exact path="/documents/:id">
           {isLoggedIn && <Document user={user} />}
         </Route>
       </Switch>

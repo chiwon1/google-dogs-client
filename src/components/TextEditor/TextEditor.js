@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useEffect, useCallback, useRef } from "react";
 import { useParams } from "react-router-dom";
 
 import "./styles.css";
@@ -24,7 +24,7 @@ const TOOLBAR_OPTIONS = [
   ["clean"],
 ];
 
-function TextEditor({ user, quill, setQuill }) {
+function TextEditor({ user, quill, handleQuill }) {
   const socketRef = useRef(null);
 
   const { id: documentId } = useParams();
@@ -100,7 +100,7 @@ function TextEditor({ user, quill, setQuill }) {
 
     quill.disable();
     quill.setText(CONSTANTS.TEXT_EDITOR_LOADING_MESSAGE);
-    setQuill(quill);
+    handleQuill(quill);
   }, []);
 
   return <div className="container" ref={wrapperRef}></div>;

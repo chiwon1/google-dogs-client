@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { getDocuments } from "../../api/documents";
 import "./styles.css";
-
-import { getDocuments } from "../../api/firebaseAuth";
 
 function Home({ user }) {
   const [documents, setDocuments] = useState([]);
@@ -18,14 +17,14 @@ function Home({ user }) {
     }
   }, [user]);
 
-  function handleClick(id) {
+  function handleGetToClickedDocument(id) {
     history.push(`/documents/${id}`);
-  };
+  }
 
   return (
     <div className="home-container">
       {documents.map(document =>
-        <div className="box" key={document._id} onClick={() => handleClick(document._id)}>
+        <div className="box" key={document._id} onClick={() => handleGetToClickedDocument(document._id)}>
           <div className="text-body">{document.body.ops[0].insert || ""}</div>
           <div className="date">{document.createdAt}</div>
         </div>)}
