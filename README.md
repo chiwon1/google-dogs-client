@@ -1,70 +1,82 @@
-# Getting Started with Create React App
+<h1 align="center">
+  Google Dogs
+</h1>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<p align="center">
+  <img alt="Quill Logo" src="./readme-assets/google_docs_logo.png">
+</p>
 
-## Available Scripts
+<p align="center">
+  <img src="https://img.shields.io/badge/Frontend-React-blue.svg" alt="Frontend-React">
+  <img src="https://img.shields.io/badge/Database-Mongo-green.svg" alt="Database-Mongo">
+  <img src="https://img.shields.io/badge/Backend-Node%20&%20Express-green.svg" alt="Backend-Node-Express">
+  <img src="https://github.com/DenisOH/pyheroku-badge/raw/master/img/deployed.svg?sanitize=true" alt="Heroku">
+  <a href="https://app.netlify.com/sites/elegant-boyd-64c1c7/deploys" title="Netlify-deploy-status">
+    <img src="https://api.netlify.com/api/v1/badges/c56adc49-fdc8-4190-8f7e-1ef7e6711128/deploy-status" alt="Netlify-deploy-status">
+  </a>
+</p>
 
-In the project directory, you can run:
+**MERN Stack**과 socket.io를 이용한 문서작업용 실시간 협업 툴 web application
 
-### `npm start`
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary>Table of Contents</summary>
+  <ol>
+    <li><a href="#installation">Installation</a></li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#ui example">UI example</a></li>
+    <li><a href="#function">Function</a></li>
+    <li><a href="#demo">Demo</a></li>
+  </ol>
+</details>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Installation
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```sh
+Server
 
-### `npm test`
+cd Backend
+npm install
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Client
 
-### `npm run build`
+cd FrontEnd
+npm install
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Usage
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```sh
+Server
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+cd Backend
+npm run dev
 
-### `npm run eject`
+Client
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+cd FrontEnd
+npm start
+// localhost:3000
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## UI example
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### 문서 작성 예시 UI
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+![GoolgeDocs](./readme-assets/ui_example_editing.png)
 
-## Learn More
+#### 문서 목록 예시 UI
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+![GoolgeDocs](./readme-assets/ui_example_list.png)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Function
+ - 구글을 이용한 소셜 로그인
+ - 로그인한 유저가 생성한 문서 목록 확인 가능
+ - 문서 URL을 공유하여 다른 사람들과 동시 작업 가능
+ - 수동 저장 또는 20초에 한번 자동 저장
 
-### Code Splitting
+## Demo
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+https://elegant-boyd-64c1c7.netlify.app/
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+(Client - netlify, Server - heroku)
