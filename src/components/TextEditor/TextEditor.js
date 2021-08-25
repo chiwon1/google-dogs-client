@@ -1,14 +1,17 @@
-import React, { useEffect, useCallback, useRef } from "react";
+import React, { useEffect, useCallback, useRef, useMemo } from "react";
 import { useParams } from "react-router-dom";
 
 import "./styles.css";
 
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
+import QuillCursors from "quill-cursors";
+import randomColor from "randomcolor";
 
 import { io } from "socket.io-client";
 
 import CONSTANTS from "../../constants";
+import { selectionChangeHandler } from "../../utills";
 
 const SAVE_INTERVAL = 20000;
 
@@ -28,6 +31,8 @@ function TextEditor({ user, quill, handleQuill }) {
   const socketRef = useRef(null);
 
   const { id: documentId } = useParams();
+  const cursorSelf = useMemo(() => quill ? quill.getModule("cursors") : null, [quill]);
+
 
   useEffect(() => {
     if (!socketRef.current) {
@@ -36,7 +41,7 @@ function TextEditor({ user, quill, handleQuill }) {
 
     const { current: socket } = socketRef;
 
-    socket.on("connect", () => {
+    socket.on("connect", (socket) => {
       console.log("connect");
     });
 
@@ -48,12 +53,12 @@ function TextEditor({ user, quill, handleQuill }) {
   useEffect(() => {
     const { current: socket } = socketRef;
 
-    if (!socket || !quill) {
+    if (!socket || !quill || !cursorSelf) {
       return;
     }
 
     const interval = setInterval(() => {
-      socket.emit("save-document", quill.getContents())
+      socket.emit("save-document", quill.getContents());
     }, SAVE_INTERVAL);
 
     socket.once("load-document", function (document) {
@@ -69,19 +74,36 @@ function TextEditor({ user, quill, handleQuill }) {
       if (source !== "user") {
         return;
       }
-
       socket.emit("send-changes", delta);
     });
 
-    socket.emit("get-document", { documentId, creator: user?.uid });
+    socket.on("user-join", (socket) => {
+      cursorSelf.createCursor(socket.id, socket.nickname, randomColor());
+    });
 
+    socket.on("load-collaborator", (sockets) => {
+      sockets.forEach(socket => {
+        cursorSelf.createCursor(socket.id, socket.nickname, randomColor());
+      });
+    });
+
+    socket.on("receive-selection", ({ range, source, id }) => {
+      selectionChangeHandler(cursorSelf, id)(range, null, source);
+    });
+
+    quill.on("selection-change", (range, _, source) => {
+      socket.emit("send-selection", { range, source, id: socket.id });
+    });
+
+    const { uid, displayName } = user ? user : { uid: null, displayName: null };
+
+    socket.emit("get-document", { documentId, creator: uid, displayName });
     return () => {
       clearInterval(interval);
-
       socket.off("receive-changes");
       quill.off("text-change");
     }
-  }, [documentId, quill]);
+  }, [documentId, quill, user, cursorSelf]);
 
   const wrapperRef = useCallback(wrapper => {
     if (!wrapper) {
@@ -92,10 +114,15 @@ function TextEditor({ user, quill, handleQuill }) {
 
     const editor = document.createElement("div");
     wrapper.append(editor);
-
+    Quill.register("modules/cursors", QuillCursors);
     const quill = new Quill(editor, {
       theme: "snow",
-      modules: { toolbar: TOOLBAR_OPTIONS },
+      modules: {
+        toolbar: TOOLBAR_OPTIONS,
+        cursors: {
+          transformOnTextChange: true,
+        },
+      },
     });
 
     quill.disable();

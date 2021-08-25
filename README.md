@@ -69,6 +69,10 @@ npm start
 
 ![GoolgeDocs](./readme-assets/ui_example_list.png)
 
+#### 동시접속 실시간 커서 예시 UI
+
+![GoolgeDocs](./readme-assets/ui_example_realtime-cursor.png)
+
 ## Function
  - 구글을 이용한 소셜 로그인
  - 로그인한 유저가 생성한 문서 목록 확인 가능
