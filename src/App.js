@@ -3,7 +3,6 @@ import { Switch, Route, Redirect } from "react-router-dom";
 
 import Home from "./pages/Home/";
 import Document from "./pages/Document/";
-
 import NavBar from "./components/NavBar";
 
 import { firebaseAuth } from "./config/firebaseAuth";

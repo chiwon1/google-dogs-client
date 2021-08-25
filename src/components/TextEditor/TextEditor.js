@@ -1,19 +1,15 @@
 import React, { useEffect, useCallback, useRef, useMemo } from "react";
 import { useParams } from "react-router-dom";
-
 import "./styles.css";
 
+import { io } from "socket.io-client";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import QuillCursors from "quill-cursors";
 import randomColor from "randomcolor";
 
-import { io } from "socket.io-client";
-
-import CONSTANTS from "../../constants";
 import { selectionChangeHandler } from "../../utills";
-
-const SAVE_INTERVAL = 20000;
+import CONSTANTS from "../../constants";
 
 const TOOLBAR_OPTIONS = [
   [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -59,7 +55,7 @@ function TextEditor({ user, quill, handleQuill }) {
 
     const interval = setInterval(() => {
       socket.emit("save-document", quill.getContents());
-    }, SAVE_INTERVAL);
+    }, CONSTANTS.SAVE_INTERVAL);
 
     socket.once("load-document", function (document) {
       quill.setContents(document);

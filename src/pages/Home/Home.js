@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { getDocuments } from "../../api/documents";
+
 import "./styles.css";
+import { getDocuments } from "../../api/documents";
 
 function Home({ user }) {
   const [documents, setDocuments] = useState([]);

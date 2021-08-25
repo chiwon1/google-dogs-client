@@ -2,8 +2,8 @@ import React from "react";
 import { Link, useHistory } from "react-router-dom";
 
 import { authenticate, firebaseAuth } from "../../config/firebaseAuth";
-import CONSTANTS from "../../constants";
 import { v4 } from "uuid";
+import CONSTANTS from "../../constants";
 
 function NavBar() {
   const history = useHistory();
